@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.RelativeLayout;
@@ -182,8 +183,8 @@ public abstract class CardHolder extends RelativeLayout {
 
     private void initViews(Context context) {
         createView(LayoutInflater.from(context));
-        screenWidth = DisplayUtil.getScreenWidth(context);
-        padding = DisplayUtil.dip2px(context, 16);
+        screenWidth = getScreenWidth(context);
+        padding = dip2px(context, 16);
         leftBoundary =  screenWidth * (1.0f/6.0f); // Left 1/6 of screen
         rightBoundary = screenWidth * (5.0f/6.0f); // Right 1/6 of screen
     }
@@ -194,6 +195,15 @@ public abstract class CardHolder extends RelativeLayout {
 
     public STATE getState() {
         return mState;
+    }
+
+    public static int getScreenWidth(Context paramContext) {
+        return ((WindowManager) paramContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getWidth();
+    }
+
+    public static int dip2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
     }
 
     protected abstract void createView(@NonNull LayoutInflater inflater);
